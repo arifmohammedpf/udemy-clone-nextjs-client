@@ -7,7 +7,7 @@ import Link from "next/link";
 const Register = () => {
   const [name, setName] = useState("Arif");
   const [email, setEmail] = useState("arif@gmail.com");
-  const [password, setPassword] = useState("1234567");
+  const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {

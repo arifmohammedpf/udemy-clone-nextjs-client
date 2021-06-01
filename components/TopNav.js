@@ -1,19 +1,20 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Menu } from "antd";
 import Link from "next/link";
 import {
-  AppstoreAddOutlined,
+  AppstoreOutlined,
   CoffeeOutlined,
   LoginOutlined,
   UserAddOutlined,
+  CarryOutOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { Context } from "../context";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import SubMenu from "antd/lib/menu/SubMenu";
+import { toast } from "react-toastify";
 
-const { Item, ItemGroup } = Menu;
+const { Item, SubMenu, ItemGroup } = Menu;
 
 const TopNav = () => {
   const [current, setCurrent] = useState("");
@@ -28,9 +29,7 @@ const TopNav = () => {
   }, [process.browser && window.location.pathname]);
 
   const logout = async () => {
-    dispatch({
-      type: "LOGOUT",
-    });
+    dispatch({ type: "LOGOUT" });
     window.localStorage.removeItem("user");
     const { data } = await axios.get("/api/logout");
     toast(data.message);
@@ -42,13 +41,36 @@ const TopNav = () => {
       <Item
         key='/'
         onClick={(e) => setCurrent(e.key)}
-        icon={<AppstoreAddOutlined />}
+        icon={<AppstoreOutlined />}
       >
         <Link href='/'>
           <a>App</a>
         </Link>
       </Item>
-      {!user && (
+
+      {user && user.role && user.role.includes("Instructor") ? (
+        <Item
+          key='/instructor/course/create'
+          onClick={(e) => setCurrent(e.key)}
+          icon={<CarryOutOutlined />}
+        >
+          <Link href='/instructor/course/create'>
+            <a>Create Course</a>
+          </Link>
+        </Item>
+      ) : (
+        <Item
+          key='/user/become-instructor'
+          onClick={(e) => setCurrent(e.key)}
+          icon={<TeamOutlined />}
+        >
+          <Link href='/user/become-instructor'>
+            <a>Become Instructor</a>
+          </Link>
+        </Item>
+      )}
+
+      {user === null && (
         <>
           <Item
             key='/login'
@@ -59,6 +81,7 @@ const TopNav = () => {
               <a>Login</a>
             </Link>
           </Item>
+
           <Item
             key='/register'
             onClick={(e) => setCurrent(e.key)}
@@ -70,10 +93,11 @@ const TopNav = () => {
           </Item>
         </>
       )}
-      {user && (
+
+      {user !== null && (
         <SubMenu
           icon={<CoffeeOutlined />}
-          title={user.name}
+          title={user && user.name}
           className='float-right'
         >
           <ItemGroup>
@@ -82,9 +106,7 @@ const TopNav = () => {
                 <a>Dashboard</a>
               </Link>
             </Item>
-            <Item onClick={logout} className='float-right'>
-              Logout
-            </Item>
+            <Item onClick={logout}>Logout</Item>
           </ItemGroup>
         </SubMenu>
       )}

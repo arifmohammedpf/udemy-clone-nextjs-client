@@ -5,6 +5,7 @@ import {
   AppstoreOutlined,
   CoffeeOutlined,
   LoginOutlined,
+  LogoutOutlined,
   UserAddOutlined,
   CarryOutOutlined,
   TeamOutlined,
@@ -37,34 +38,34 @@ const TopNav = () => {
   };
 
   return (
-    <Menu mode='horizontal' selectedKeys={[current]}>
+    <Menu mode="horizontal" selectedKeys={[current]} className="mb-2">
       <Item
-        key='/'
+        key="/"
         onClick={(e) => setCurrent(e.key)}
         icon={<AppstoreOutlined />}
       >
-        <Link href='/'>
+        <Link href="/">
           <a>App</a>
         </Link>
       </Item>
 
       {user && user.role && user.role.includes("Instructor") ? (
         <Item
-          key='/instructor/course/create'
+          key="/instructor/course/create"
           onClick={(e) => setCurrent(e.key)}
           icon={<CarryOutOutlined />}
         >
-          <Link href='/instructor/course/create'>
+          <Link href="/instructor/course/create">
             <a>Create Course</a>
           </Link>
         </Item>
       ) : (
         <Item
-          key='/user/become-instructor'
+          key="/user/become-instructor"
           onClick={(e) => setCurrent(e.key)}
           icon={<TeamOutlined />}
         >
-          <Link href='/user/become-instructor'>
+          <Link href="/user/become-instructor">
             <a>Become Instructor</a>
           </Link>
         </Item>
@@ -73,21 +74,21 @@ const TopNav = () => {
       {user === null && (
         <>
           <Item
-            key='/login'
+            key="/login"
             onClick={(e) => setCurrent(e.key)}
             icon={<LoginOutlined />}
           >
-            <Link href='/login'>
+            <Link href="/login">
               <a>Login</a>
             </Link>
           </Item>
 
           <Item
-            key='/register'
+            key="/register"
             onClick={(e) => setCurrent(e.key)}
             icon={<UserAddOutlined />}
           >
-            <Link href='/register'>
+            <Link href="/register">
               <a>Register</a>
             </Link>
           </Item>
@@ -98,17 +99,30 @@ const TopNav = () => {
         <SubMenu
           icon={<CoffeeOutlined />}
           title={user && user.name}
-          className='float-right'
+          className="float-right"
         >
           <ItemGroup>
-            <Item key='/user'>
-              <Link href='/user'>
+            <Item key="/user">
+              <Link href="/user">
                 <a>Dashboard</a>
               </Link>
             </Item>
             <Item onClick={logout}>Logout</Item>
           </ItemGroup>
         </SubMenu>
+      )}
+
+      {user && user.role && user.role.includes("Instructor") && (
+        <Item
+          key="/instructor"
+          onClick={(e) => setCurrent(e.key)}
+          icon={<TeamOutlined />}
+          className="float-right"
+        >
+          <Link href="/instructor">
+            <a>Instructor</a>
+          </Link>
+        </Item>
       )}
     </Menu>
   );

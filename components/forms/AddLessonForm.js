@@ -1,5 +1,6 @@
 import { Button, Progress, Tooltip } from "antd";
-import { CloseCircleFilled, CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleFilled } from "@ant-design/icons";
+import MarkdownCheetsheet from "../../components/modal/MarkdownCheatsheet";
 
 const AddLessonForm = ({
   values,
@@ -10,15 +11,27 @@ const AddLessonForm = ({
   handleVideo,
   progress,
   handleVideoRemove,
+  markdownCheetsheetModal,
+  setMarkdownCheetsheetModal = (f) => f,
 }) => {
   return (
-    <div className="container pt-3">
+    <div className="container">
+      <div
+        onClick={() => setMarkdownCheetsheetModal(!markdownCheetsheetModal)}
+        className="text-center mb-4 pointer"
+      >
+        <b>Learn</b> to <i>write</i> in <code>markdown</code>
+      </div>
+      <MarkdownCheetsheet
+        markdownCheetsheetModal={markdownCheetsheetModal}
+        setMarkdownCheetsheetModal={setMarkdownCheetsheetModal}
+      />
       <form onSubmit={handleAddLesson}>
         <input
           type="text"
           className="form-control square"
           onChange={(e) => setValues({ ...values, title: e.target.value })}
-          values={values.title}
+          value={values.title}
           placeholder="Title"
           autoFocus
           required
@@ -26,11 +39,10 @@ const AddLessonForm = ({
 
         <textarea
           className="form-control mt-3"
-          cols="7"
-          rows="7"
           onChange={(e) => setValues({ ...values, content: e.target.value })}
-          values={values.content}
+          value={values.content}
           placeholder="Content"
+          rows="4"
         ></textarea>
 
         <div className="d-flex justify-content-center">
@@ -38,7 +50,6 @@ const AddLessonForm = ({
             {uploadButtonText}
             <input onChange={handleVideo} type="file" accept="video/*" hidden />
           </label>
-
           {!uploading && values.video.Location && (
             <Tooltip title="Remove">
               <span onClick={handleVideoRemove} className="pt-1 pl-3">
@@ -63,6 +74,7 @@ const AddLessonForm = ({
           type="primary"
           loading={uploading}
           shape="round"
+          disabled={uploading}
         >
           Save
         </Button>

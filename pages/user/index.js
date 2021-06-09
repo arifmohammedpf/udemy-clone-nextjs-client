@@ -5,7 +5,6 @@ import axios from "axios";
 import { Avatar } from "antd";
 import Link from "next/link";
 import { SyncOutlined, PlayCircleOutlined } from "@ant-design/icons";
-import course from "../../../server/models/course";
 
 const UserIndex = () => {
   const {
@@ -21,9 +20,11 @@ const UserIndex = () => {
   const loadCourses = async () => {
     try {
       setLoading(true);
+      console.log("OOOOk---user index start");
       const { data } = await axios.get("/api/user-courses");
       setCourses(data);
       setLoading(false);
+      console.log("OOOOk---user index end");
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -35,47 +36,47 @@ const UserIndex = () => {
       {loading && (
         <SyncOutlined
           spin
-          className="d-flex justify-content-center display-1 text-danger p-5"
+          className='d-flex justify-content-center display-1 text-danger p-5'
         />
       )}
-      <h1 className="jumbotron text-center square">User dashboard</h1>
+      <h1 className='jumbotron text-center square'>User dashboard</h1>
 
       {/* show list of courses */}
 
       {courses &&
         courses.map((course) => (
-          <div key={course._id} className="media pt-2 pb-1">
+          <div key={course._id} className='media pt-2 pb-1'>
             <Avatar
               size={80}
-              shape="square"
+              shape='square'
               src={course.image ? course.image.Location : "/course.png"}
             />
 
-            <div className="media-body pl-2">
-              <div className="row">
-                <div className="col">
+            <div className='media-body pl-2'>
+              <div className='row'>
+                <div className='col'>
                   <Link
                     href={`/user/course/${course.slug}`}
-                    className="pointer"
+                    className='pointer'
                   >
                     <a>
-                      <h5 className="mt-2 text-primary">{course.name}</h5>
+                      <h5 className='mt-2 text-primary'>{course.name}</h5>
                     </a>
                   </Link>
                   <p style={{ marginTop: "-10px" }}>
                     {course.lessons.length} lessons
                   </p>
                   <p
-                    className="text-muted"
+                    className='text-muted'
                     style={{ marginTop: "-15px", fontSize: "12px" }}
                   >
                     By {course.instructor.name}
                   </p>
                 </div>
-                <div className="col-md-3 mt-3 text-center">
+                <div className='col-md-3 mt-3 text-center'>
                   <Link href={`/user/course/${course.slug}`}>
                     <a>
-                      <PlayCircleOutlined className="h2 pointer text-primary" />
+                      <PlayCircleOutlined className='h2 pointer text-primary' />
                     </a>
                   </Link>
                 </div>
